@@ -1,10 +1,23 @@
-#!/bin/sh
+#!/bin/bash
+set -euo pipefail
+trap 's=$?; echo "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
 
-set -ex
+HOST=$(dialog      --stdout --inputbox "Enter hostname" 0 0) || exit 1
+clear
+USERNAME=$(dialog  --stdout --inputbox "Enter username" 0 0) || exit 1
+clear
+PASSWORD=$(dialog  --stdout --inputbox "Enter username password" 0 0) || exit 1
+clear
+PASSWORD2=$(dialog --stdout --inputbox "Enter username password again" 0 0) || exit 1
+clear
 
-HOST=
-USERNAME=
-PASSWORD=
+if ! [[ "$PASSWORD" == "$PASSWORD2" ]];then
+    echo "***********************"
+    echo "Passwords did not match"
+    echo "***********************"
+    exit 1
+fi
+
 HOME_DIR="/home/${USERNAME}"
 SWAP_SIZE=4096
 
@@ -52,3 +65,5 @@ cat << EOF > /etc/vconsole.conf
 FONT=ter-p24n
 FONT_MAP=8859-2
 EOF
+
+timedatectl set-ntp true

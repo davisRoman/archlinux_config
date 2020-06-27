@@ -1,6 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 
-set -ex
+set -euo pipefail
+trap 's=$?; echo "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
 
 setfont iso02-12x22
 
@@ -12,8 +13,6 @@ export HOME_PARTITION="${DISK}3"
 umount $EFI_PARTITION || true
 umount $HOME_PARTITION || true
 umount $ROOT_PARTITION || true
-
-echo DISK="$DISK", PARTITION="$PARTITION"
 
 parted -s "$DISK" mklabel gpt
 parted -s "$DISK" mkpart "EFI"    fat32 1MiB   500MiB
@@ -63,7 +62,12 @@ pacstrap /mnt base \
               nvidia \
               nvidia-utils \
               terminus-font \
-              zsh
+              git\
+              tmux \
+              the_silver_searcher \
+              bat \
+              tig \
+              tree
 
 
 cp -v ./chroot.sh /mnt
