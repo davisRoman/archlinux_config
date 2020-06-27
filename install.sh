@@ -62,7 +62,8 @@ pacstrap /mnt base \
               xorg-server \
               nvidia \
               nvidia-utils \
-              terminus-font
+              terminus-font \
+              zsh
 
 
 cp -v ./chroot.sh /mnt
