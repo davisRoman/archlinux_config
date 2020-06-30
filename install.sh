@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail
+set -eo pipefail
 trap 's=$?; echo "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
 
 setfont iso02-12x22
@@ -33,6 +33,8 @@ pacman -Syy
 
 mount "$ROOT_PARTITION" /mnt
 
+cp -v einstein.jpg /mnt/home/davis/pictures
+
 mkdir -p /mnt/home
 mount "$HOME_PARTITION" /mnt/home
 
@@ -59,6 +61,7 @@ pacstrap /mnt base \
               mtools \
               intel-ucode \
               xorg-server \
+              xorg-xinit \
               nvidia \
               nvidia-utils \
               terminus-font \
@@ -67,7 +70,13 @@ pacstrap /mnt base \
               the_silver_searcher \
               bat \
               tig \
-              tree
+              tree \
+	      powerline-fonts \
+	      termite \
+              zsh \
+	      i3 \
+	      firefox \
+	      feh
 
 
 cp -v ./chroot.sh /mnt
